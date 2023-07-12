@@ -16,6 +16,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
 import { AuthService } from './auth.service';
+import { User } from './user.entity';
+import { CurrentUser } from './decorators/current-user.decorator';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -24,6 +26,11 @@ export class UsersController {
     private usersService: UsersService,
     private authService: AuthService,
   ) {}
+
+  @Get('/whoami')
+  whoAmi(@CurrentUser() user: User) {
+    return user;
+  }
 
   @Post('/signup')
   async createUser(@Body() body: CreateUserDto, @Session() session: any) {
